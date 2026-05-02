@@ -1,0 +1,10 @@
+{
+  "address": "Musterstraße 1",
+  "city": "12345 Musterstadt",
+  "phone": "+49 123 456789",
+  "email": "info@tennisclub.de",
+  "openingHours": [
+    { "days": "Mo–Fr", "hours": "09:00–21:00 Uhr" },
+    { "days": "Sa–So", "hours": "08:00–20:00 Uhr" }
+  ]
+}

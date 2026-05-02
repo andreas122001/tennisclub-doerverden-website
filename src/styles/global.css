@@ -1,0 +1,17 @@
+@import "tailwindcss";
+/* Enables the `prose` class, which styles rendered Markdown:
+   headings, paragraphs, lists, blockquotes, etc.
+   Used on pages that render CMS Markdown content (About, Impressum, posts…). */
+@plugin "@tailwindcss/typography";
+
+@layer base {
+  html {
+    scroll-behavior: smooth; /* Smooth scroll for any in-page anchor links */
+  }
+
+  body {
+    /* Sharper text rendering on macOS/iOS. No effect on Windows. */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}

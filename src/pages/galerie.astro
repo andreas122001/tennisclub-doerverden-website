@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const items = await getCollection('gallery');
+// Filter out placeholder entries where the owner hasn't uploaded an image yet
+const photos = items.filter(item => item.data.image);
+---
+
+<BaseLayout title="Galerie">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <h1 class="text-3xl font-bold text-slate-900 mb-8">Galerie</h1>
+
+    {photos.length === 0 ? (
+      <p class="text-slate-500">Noch keine Fotos vorhanden.</p>
+    ) : (
+      <!-- TODO: wrap images in a lightbox trigger (Step 5) -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        {photos.map(item => (
+          <figure class="group overflow-hidden rounded-lg bg-slate-100">
+            <img
+              src={item.data.image}
+              alt={item.data.caption ?? ''}
+              loading="lazy"
+              class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+            {item.data.caption && (
+              <figcaption class="px-3 py-2 text-xs text-slate-500">{item.data.caption}</figcaption>
+            )}
+          </figure>
+        ))}
+      </div>
+    )}
+  </div>
+</BaseLayout>

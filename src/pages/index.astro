@@ -1,17 +1,117 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import homeData from '../data/home.json';
 
+const posts: CollectionEntry<'posts'>[] = await getCollection('posts');
+const sortedPosts = posts.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+// Slash geometry constants — tweak to taste
+const sep = homeData.heroSeparation;   // 0–100: position of the slash centre
+const slant = 6;                       // how many % the diagonal deviates from vertical
+const half = 1.5;                       // half-width of the separator stripe (%)
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="Startseite" description={homeData.heroSubtitle}>
+
+  <!-- Split hero -->
+  <section
+    class="relative flex items-center justify-center min-h-[45vh] bg-slate-900 overflow-hidden"
+    style={`--sep:${sep}; --slant:${slant}; --half:${half}`}
+  >
+    <!-- Left image — clipped to the left of the slash -->
+    {homeData.heroImage && (
+      <Image
+        src={homeData.heroImage}
+        alt=""
+        width={1920}
+        height={1080}
+        loading="eager"
+        fetchpriority="high"
+        class="absolute inset-0 w-full h-full object-cover opacity-60"
+        style={homeData.heroImage2
+          ? "clip-path: polygon(0 0, calc(var(--sep)*1% + var(--slant)*1%) 0, calc(var(--sep)*1% - var(--slant)*1%) 100%, 0 100%)"
+          : undefined}
+      />
+    )}
+
+    <!-- Right image — clipped to the right of the slash -->
+    {homeData.heroImage2 && (
+      <Image
+        src={homeData.heroImage2}
+        alt=""
+        width={1920}
+        height={1080}
+        loading="eager"
+        class="absolute inset-0 w-full h-full object-cover opacity-60"
+        style="clip-path: polygon(calc(var(--sep)*1% + var(--slant)*1%) 0, 100% 0, 100% 100%, calc(var(--sep)*1% - var(--slant)*1%) 100%)"
+      />
+    )}
+
+    <!-- Diagonal separator stripe -->
+    {homeData.heroImage2 && (
+      <div
+        class="absolute inset-0 z-10 bg-white/50"
+        style="clip-path: polygon(
+          calc(var(--sep)*1% + var(--slant)*1% - var(--half)*1%) 0,
+          calc(var(--sep)*1% + var(--slant)*1% + var(--half)*1%) 0,
+          calc(var(--sep)*1% - var(--slant)*1% + var(--half)*1%) 100%,
+          calc(var(--sep)*1% - var(--slant)*1% - var(--half)*1%) 100%
+        )"
+      />
+    )}
+
+    <!-- Text overlay -->
+    <div class="relative z-20 text-center px-4 py-16">
+      <p class="text-sm font-semibold text-white/60 uppercase tracking-widest mb-3">Willkommen beim</p>
+      <h1 class="text-4xl sm:text-5xl font-bold text-white mb-4">
+        {homeData.heroTitle}
+      </h1>
+      {homeData.heroSubtitle && (
+        <p class="text-lg sm:text-xl text-slate-200 max-w-xl mx-auto">
+          {homeData.heroSubtitle}
+        </p>
+      )}
+    </div>
+  </section>
+
+  <!-- Posts feed -->
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <h2 class="text-2xl font-bold text-slate-900 mb-8">Aktuelles</h2>
+
+    {sortedPosts.length === 0 ? (
+      <p class="text-slate-500">Noch keine Beiträge vorhanden.</p>
+    ) : (
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        {sortedPosts.map(post => (
+          <article class="flex flex-col">
+            {post.data.coverImage && (
+              <img
+                src={post.data.coverImage}
+                alt=""
+                class="w-full h-48 object-cover rounded-lg mb-4"
+              />
+            )}
+            <h3 class="text-lg font-semibold text-slate-900 mb-1">
+              <a href={`/posts/${post.id}`} class="hover:text-emerald-700 transition-colors">
+                {post.data.title}
+              </a>
+            </h3>
+            <time class="text-sm text-slate-400 mb-2">
+              {post.data.date.toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' })}
+            </time>
+            {post.data.description && (
+              <p class="text-slate-600 text-sm flex-1">{post.data.description}</p>
+            )}
+            <a href={`/posts/${post.id}`} class="mt-3 text-sm font-medium text-emerald-700 hover:underline">
+              Weiterlesen →
+            </a>
+          </article>
+        ))}
+      </div>
+    )}
+  </section>
+
+</BaseLayout>

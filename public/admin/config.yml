@@ -1,0 +1,101 @@
+# GitHub backend — update repo before deploying to production
+backend:
+  name: github
+  repo: PLACEHOLDER/tennisclub  # TODO: replace with your-github-username/tennisclub
+  branch: main
+
+# Enables the CMS UI against local files when running `npm run cms`
+local_backend: true
+
+# Images uploaded via CMS go to public/uploads/ and are served at /uploads/
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+collections:
+
+  # ─── Singleton pages ──────────────────────────────────────────────────────
+  - name: "pages"
+    label: "Seiten"
+    files:
+
+      - name: "home"
+        label: "Startseite"
+        file: "src/data/home.json"
+        fields:
+          - { label: "Hero Titel",      name: "heroTitle",    widget: "string" }
+          - { label: "Hero Untertitel", name: "heroSubtitle", widget: "string",  required: false }
+          - { label: "Hero Bild",       name: "heroImage",    widget: "image",   required: false }
+          - { label: "Hero Bild 2 (rechts)",     name: "heroImage2",      widget: "image",  required: false }
+          - { label: "Trenner-Position (0–100)", name: "heroSeparation",  widget: "number", default: 55, value_type: "int", min: 0, max: 100, required: false }
+
+      - name: "contact"
+        label: "Kontakt"
+        file: "src/data/contact.json"
+        fields:
+          - { label: "Straße / Hausnummer", name: "address", widget: "string" }
+          - { label: "PLZ / Ort",           name: "city",    widget: "string" }
+          - { label: "Telefon",             name: "phone",   widget: "string", required: false }
+          - { label: "E-Mail",              name: "email",   widget: "string", required: false }
+          - label: "Öffnungszeiten"
+            name: "openingHours"
+            widget: "list"
+            fields:
+              - { label: "Tag(e)",  name: "days",  widget: "string" }
+              - { label: "Zeiten", name: "hours", widget: "string" }
+
+      - name: "pricing"
+        label: "Preise"
+        file: "src/data/pricing.json"
+        fields:
+          - { label: "Überschrift", name: "title", widget: "string" }
+          - { label: "Einleitung",  name: "intro", widget: "text",   required: false }
+          - label: "Preistabelle"
+            name: "table"
+            widget: "list"
+            fields:
+              - { label: "Mitgliedschaft", name: "type",  widget: "string" }
+              - { label: "Beitrag",        name: "price", widget: "string" }
+              - { label: "Anmerkung",      name: "note",  widget: "string", required: false }
+
+      - name: "about"
+        label: "Über uns"
+        file: "src/content/pages/about.md"
+        fields:
+          - { label: "Titel",   name: "title", widget: "string"   }
+          - { label: "Inhalt",  name: "body",  widget: "markdown" }
+
+      - name: "impressum"
+        label: "Impressum"
+        file: "src/content/pages/impressum.md"
+        fields:
+          - { label: "Titel",  name: "title", widget: "string"   }
+          - { label: "Inhalt", name: "body",  widget: "markdown" }
+
+      - name: "datenschutz"
+        label: "Datenschutz"
+        file: "src/content/pages/datenschutz.md"
+        fields:
+          - { label: "Titel",  name: "title", widget: "string"   }
+          - { label: "Inhalt", name: "body",  widget: "markdown" }
+
+  # ─── Beiträge (blog posts) ────────────────────────────────────────────────
+  - name: "posts"
+    label: "Beiträge"
+    folder: "src/content/posts"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Titel",       name: "title",       widget: "string"   }
+      - { label: "Datum",       name: "date",        widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
+      - { label: "Beschreibung (Vorschau)", name: "description", widget: "text",   required: false }
+      - { label: "Titelbild",   name: "coverImage",  widget: "image",   required: false }
+      - { label: "Inhalt",      name: "body",        widget: "markdown" }
+
+  # ─── Galerie ──────────────────────────────────────────────────────────────
+  - name: "gallery"
+    label: "Galerie"
+    folder: "src/content/gallery"
+    create: true
+    fields:
+      - { label: "Bild",         name: "image",   widget: "image"  }
+      - { label: "Beschriftung", name: "caption", widget: "string", required: false }

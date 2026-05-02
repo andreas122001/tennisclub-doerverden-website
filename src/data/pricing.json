@@ -1,0 +1,10 @@
+{
+  "title": "Mitgliedschaftsbeiträge",
+  "intro": "Werden Sie Teil unseres Vereins. Unsere Beiträge im Überblick:",
+  "table": [
+    { "type": "Erwachsene", "price": "150 €/Jahr", "note": "" },
+    { "type": "Jugend (bis 18 Jahre)", "price": "80 €/Jahr", "note": "" },
+    { "type": "Familie", "price": "250 €/Jahr", "note": "Bis zu 4 Personen" },
+    { "type": "Senioren (ab 65 Jahre)", "price": "100 €/Jahr", "note": "" }
+  ]
+}
