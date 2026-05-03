@@ -91,8 +91,30 @@ collections:
       - { label: "Titel",       name: "title",       widget: "string"   }
       - { label: "Datum",       name: "date",        widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
       - { label: "Beschreibung (Vorschau)", name: "description", widget: "text",   required: false }
-      - { label: "Titelbild",   name: "coverImage",  widget: "image",   required: false }
+      - { label: "Titelbild",   name: "coverImage",  widget: "image",    required: false }
+      - { label: "Angepinnt",   name: "pinned",      widget: "boolean",  default: false,    required: false }
+      - { label: "Tags",        name: "tags",        widget: "list",     required: false }
       - { label: "Inhalt",      name: "body",        widget: "markdown" }
+
+  # ─── Veranstaltungen ─────────────────────────────────────────────────────
+  - name: "events"
+    label: "Veranstaltungen"
+    folder: "src/content/events"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Titel",       name: "title",       widget: "string" }
+      - { label: "Datum",       name: "date",        widget: "datetime", date_format: "YYYY-MM-DD", time_format: false }
+      - { label: "Beschreibung", name: "description", widget: "text",   required: false }
+      - { label: "Ort",          name: "location",    widget: "string", required: false }
+      - label: "Verlinkter Beitrag"
+        name: "link"
+        widget: "relation"
+        collection: "posts"
+        search_fields: ["title"]
+        value_field: "/posts/{{slug}}"
+        display_fields: ["title"]
+        required: false
 
   # ─── Galerie ──────────────────────────────────────────────────────────────
   - name: "gallery"

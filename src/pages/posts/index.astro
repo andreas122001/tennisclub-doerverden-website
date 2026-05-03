@@ -1,0 +1,143 @@
+---
+// Full posts archive: pinned first, then by date desc.
+// Search and pagination are handled client-side so no extra static pages are needed.
+
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+
+const allPosts: CollectionEntry<'posts'>[] = await getCollection('posts');
+const sortedPosts = allPosts.sort((a, b) => {
+  if (a.data.pinned !== b.data.pinned) return a.data.pinned ? -1 : 1;
+  return b.data.date.getTime() - a.data.date.getTime();
+});
+---
+
+<BaseLayout title="Alle Beiträge">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-10">
+      <h1 class="text-3xl font-bold text-slate-900">Alle Beiträge</h1>
+
+      <!-- Client-side search — filters the list below without a page reload -->
+      <input
+        id="search"
+        type="search"
+        placeholder="Suchen…"
+        class="w-full sm:w-64 px-4 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+      />
+    </div>
+
+    <!-- Posts list — each article carries a data-search attribute for the JS filter -->
+    <div id="posts-list" class="space-y-6">
+      {sortedPosts.map((post, i) => (
+        <article
+          data-index={i}
+          data-search={`${post.data.title} ${post.data.description ?? ''} ${(post.data.tags ?? []).join(' ')}`}
+          class="flex flex-col sm:flex-row gap-4 pb-6 border-b border-slate-100 last:border-0"
+        >
+          {post.data.coverImage && (
+            <a href={`/posts/${post.id}`} tabindex="-1" aria-hidden="true" class="shrink-0">
+              <img
+                src={post.data.coverImage}
+                alt=""
+                class="w-full sm:w-32 h-32 object-cover rounded-lg hover:opacity-90 transition-opacity"
+              />
+            </a>
+          )}
+          <div class="flex flex-col">
+            <div class="flex items-center gap-2 flex-wrap mb-1">
+              {post.data.pinned && (
+                <span class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
+                  Angepinnt
+                </span>
+              )}
+              {(post.data.tags ?? []).map(tag => (
+                <span class="text-xs text-slate-500 bg-slate-100 px-2 py-0.5 rounded">{tag}</span>
+              ))}
+            </div>
+            <h2 class="text-lg font-semibold text-slate-900 mb-1">
+              <a href={`/posts/${post.id}`} class="hover:text-emerald-700 transition-colors">
+                {post.data.title}
+              </a>
+            </h2>
+            <time class="text-sm text-slate-400 mb-2">
+              {post.data.date.toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' })}
+            </time>
+            {post.data.description && (
+              <p class="text-slate-600 text-sm">{post.data.description}</p>
+            )}
+          </div>
+        </article>
+      ))}
+    </div>
+
+    <p id="no-results" class="hidden text-slate-500 text-sm mt-4">Keine Beiträge gefunden.</p>
+
+    <!-- Pagination — hidden when searching or when all posts fit on one page -->
+    <div id="pagination" class="flex items-center justify-between mt-10">
+      <button id="prev-btn" class="px-4 py-2 text-sm font-medium text-slate-600 border border-slate-300 rounded-lg hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
+        ← Zurück
+      </button>
+      <span id="page-info" class="text-sm text-slate-500"></span>
+      <button id="next-btn" class="px-4 py-2 text-sm font-medium text-slate-600 border border-slate-300 rounded-lg hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors">
+        Weiter →
+      </button>
+    </div>
+
+  </div>
+</BaseLayout>
+
+<script>
+  const PAGE_SIZE = 10;
+
+  const articles  = Array.from(document.querySelectorAll<HTMLElement>('#posts-list article'));
+  const search    = document.getElementById('search')    as HTMLInputElement;
+  const noResults = document.getElementById('no-results') as HTMLElement;
+  const pagination = document.getElementById('pagination') as HTMLElement;
+  const pageInfo  = document.getElementById('page-info') as HTMLElement;
+  const prevBtn   = document.getElementById('prev-btn')  as HTMLButtonElement;
+  const nextBtn   = document.getElementById('next-btn')  as HTMLButtonElement;
+
+  let filtered = articles;
+  let page = 0;
+
+  function render() {
+    const query = search.value.trim().toLowerCase();
+    const searching = query.length > 0;
+
+    filtered = searching
+      ? articles.filter(a => a.dataset.search!.toLowerCase().includes(query))
+      : articles;
+
+    articles.forEach(a => a.classList.add('hidden'));
+    noResults.classList.add('hidden');
+
+    if (filtered.length === 0) {
+      noResults.classList.remove('hidden');
+      pagination.classList.add('hidden');
+      return;
+    }
+
+    if (searching) {
+      // Show all matches at once — typically a small set
+      filtered.forEach(a => a.classList.remove('hidden'));
+      pagination.classList.add('hidden');
+    } else {
+      const start = page * PAGE_SIZE;
+      filtered.slice(start, start + PAGE_SIZE).forEach(a => a.classList.remove('hidden'));
+
+      const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+      pageInfo.textContent = `Seite ${page + 1} von ${totalPages}`;
+      prevBtn.disabled = page === 0;
+      nextBtn.disabled = page >= totalPages - 1;
+      pagination.classList.toggle('hidden', filtered.length <= PAGE_SIZE);
+    }
+  }
+
+  search.addEventListener('input', () => { page = 0; render(); });
+  prevBtn.addEventListener('click', () => { page--; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+  nextBtn.addEventListener('click', () => { page++; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+  render();
+</script>

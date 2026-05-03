@@ -14,15 +14,16 @@ const photos = items.filter(item => item.data.image);
     {photos.length === 0 ? (
       <p class="text-slate-500">Noch keine Fotos vorhanden.</p>
     ) : (
-      <!-- TODO: wrap images in a lightbox trigger (Step 5) -->
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-        {photos.map(item => (
-          <figure class="group overflow-hidden rounded-lg bg-slate-100">
+        {photos.map((item, i) => (
+          <figure class="group overflow-hidden rounded-lg bg-slate-100 cursor-pointer">
+            <!-- data-index lets the JS know which photo was clicked -->
             <img
               src={item.data.image}
               alt={item.data.caption ?? ''}
               loading="lazy"
-              class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+              data-index={i}
+              class="lightbox-trigger w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
             />
             {item.data.caption && (
               <figcaption class="px-3 py-2 text-xs text-slate-500">{item.data.caption}</figcaption>
@@ -32,4 +33,139 @@ const photos = items.filter(item => item.data.image);
       </div>
     )}
   </div>
+
+  <!-- ─── Lightbox overlay ───────────────────────────────────────────────────
+       Hidden by default. JS removes the 'hidden' class when a photo is clicked.
+       aria-modal + role="dialog" tell screen readers this is a modal layer.    -->
+  <div
+    id="lightbox"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Bildvorschau"
+    class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/90"
+  >
+    <!-- Close button (top-right corner) -->
+    <button
+      id="lb-close"
+      aria-label="Schließen"
+      class="absolute top-4 right-4 text-white/70 hover:text-white transition-colors p-2"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+
+    <!-- Previous photo button -->
+    <button
+      id="lb-prev"
+      aria-label="Vorheriges Bild"
+      class="absolute left-2 sm:left-4 text-white/70 hover:text-white transition-colors p-2"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
+
+    <!-- The full-size image -->
+    <img
+      id="lb-img"
+      src=""
+      alt=""
+      class="max-h-[85vh] max-w-[85vw] object-contain rounded shadow-2xl"
+    />
+
+    <!-- Next photo button -->
+    <button
+      id="lb-next"
+      aria-label="Nächstes Bild"
+      class="absolute right-2 sm:right-4 text-white/70 hover:text-white transition-colors p-2"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+
+    <!-- Caption (bottom-centre, only shown when present) -->
+    <p
+      id="lb-caption"
+      class="absolute bottom-4 left-1/2 -translate-x-1/2 text-sm text-white/70 text-center px-4"
+    ></p>
+
+    <!-- Counter (e.g. "3 / 12") -->
+    <p
+      id="lb-counter"
+      class="absolute top-4 left-1/2 -translate-x-1/2 text-sm text-white/50"
+    ></p>
+  </div>
 </BaseLayout>
+
+<!-- ─── Lightbox script ────────────────────────────────────────────────────────
+     Collects all thumbnail src/alt values at page load so the lightbox can
+     display them without making extra network requests.                        -->
+<script>
+  // Build a flat list of { src, alt } from every thumbnail on the page
+  const triggers = Array.from(document.querySelectorAll<HTMLImageElement>('.lightbox-trigger'));
+  const photos   = triggers.map(img => ({ src: img.src, alt: img.alt }));
+
+  const lightbox  = document.getElementById('lightbox')!;
+  const lbImg     = document.getElementById('lb-img')     as HTMLImageElement;
+  const lbCaption = document.getElementById('lb-caption')!;
+  const lbCounter = document.getElementById('lb-counter')!;
+  const lbClose   = document.getElementById('lb-close')!;
+  const lbPrev    = document.getElementById('lb-prev')!;
+  const lbNext    = document.getElementById('lb-next')!;
+
+  let current = 0;
+
+  function show(index: number) {
+    current = (index + photos.length) % photos.length; // wrap around
+    const photo = photos[current];
+    lbImg.src        = photo.src;
+    lbImg.alt        = photo.alt;
+    lbCaption.textContent = photo.alt;
+    lbCaption.classList.toggle('hidden', !photo.alt);
+    lbCounter.textContent = `${current + 1} / ${photos.length}`;
+  }
+
+  function open(index: number) {
+    show(index);
+    lightbox.classList.remove('hidden');
+    document.body.style.overflow = 'hidden'; // prevent background scroll
+    lbClose.focus();
+  }
+
+  function close() {
+    lightbox.classList.add('hidden');
+    document.body.style.overflow = '';
+    // Return focus to the thumbnail that opened the lightbox
+    triggers[current]?.focus();
+  }
+
+  // Open on thumbnail click
+  triggers.forEach((img, i) => {
+    // Make thumbnails keyboard-accessible
+    img.setAttribute('tabindex', '0');
+    img.setAttribute('role', 'button');
+    img.addEventListener('click', () => open(i));
+    img.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(i); }
+    });
+  });
+
+  lbClose.addEventListener('click', close);
+  lbPrev.addEventListener('click',  () => show(current - 1));
+  lbNext.addEventListener('click',  () => show(current + 1));
+
+  // Click the dark backdrop (not the image) to close
+  lightbox.addEventListener('click', (e: MouseEvent) => {
+    if (e.target === lightbox) close();
+  });
+
+  // Keyboard: Escape closes, arrows navigate
+  document.addEventListener('keydown', (e: KeyboardEvent) => {
+    if (lightbox.classList.contains('hidden')) return;
+    if (e.key === 'Escape')     close();
+    if (e.key === 'ArrowLeft')  show(current - 1);
+    if (e.key === 'ArrowRight') show(current + 1);
+  });
+</script>

@@ -13,6 +13,8 @@ const posts = defineCollection({
     date: z.coerce.date(), // coerce converts the "2025-01-01" frontmatter string into a JS Date
     description: z.string().optional(),
     coverImage: z.string().optional(),
+    pinned: z.boolean().default(false), // pinned posts float to the top everywhere
+    tags: z.array(z.string()).optional(),
   }),
 });
 
@@ -34,4 +36,17 @@ const pages = defineCollection({
   }),
 });
 
-export const collections = { posts, gallery, pages };
+// Upcoming club events: title, date, optional description, location, and a link to a related post.
+// Only future-dated entries are shown on the home page; past ones are kept for the archive.
+const events = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/events' }),
+  schema: z.object({
+    title: z.string(),
+    date: z.coerce.date(),
+    description: z.string().optional(),
+    location: z.string().optional(),
+    link: z.string().optional(), // optional path or URL for "Mehr erfahren"
+  }),
+});
+
+export const collections = { posts, gallery, pages, events };

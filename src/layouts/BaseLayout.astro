@@ -35,29 +35,76 @@ const currentPath = Astro.url.pathname;
   </head>
   <body class="min-h-screen flex flex-col bg-white text-slate-800">
 
-    <!-- sticky: header scrolls with the page and stays on top.
-         backdrop-blur-sm: frosted-glass effect when content scrolls behind it. -->
+    <!-- ─── Header ────────────────────────────────────────────────────────────
+         sticky: stays at top as the page scrolls beneath it.
+         backdrop-blur-sm: frosted-glass effect on the white background.       -->
     <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-slate-200">
-      <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center gap-x-6 gap-y-2 h-16">
+
+      <!-- Main nav bar (logo + desktop links + hamburger button) -->
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center h-16">
         <a href="/" class="font-bold text-lg text-slate-900 mr-auto tracking-tight">
           TC Dörverden
         </a>
-        {navLinks.map(link => (
-          <a
-            href={link.href}
-            class:list={[
-              'text-sm font-medium transition-colors',
-              // Exact match so /ueber-uns doesn't highlight on a hypothetical /ueber-uns/sub-page
-              currentPath == link.href
-                ? 'text-emerald-700'        // active
-                : 'text-slate-600 hover:text-slate-900',
-            ]}
-          >
-            {link.label}
-          </a>
-        ))}
-      </nav>
+
+        <!-- Desktop links — hidden on mobile, shown from md breakpoint up -->
+        <div class="hidden md:flex items-center gap-x-6">
+          {navLinks.map(link => (
+            <a
+              href={link.href}
+              class:list={[
+                'text-sm font-medium transition-colors',
+                // Exact match so /ueber-uns doesn't highlight on a hypothetical /ueber-uns/sub-page
+                currentPath == link.href
+                  ? 'text-emerald-700'
+                  : 'text-slate-600 hover:text-slate-900',
+              ]}
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
+
+        <!-- Hamburger button — visible on mobile only, hidden from md breakpoint up -->
+        <button
+          id="nav-toggle"
+          class="md:hidden p-2 rounded-md text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors"
+          aria-label="Navigation öffnen"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+        >
+          <!-- Hamburger icon (three lines) — shown when menu is closed -->
+          <svg id="icon-open" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <!-- X icon — shown when menu is open -->
+          <svg id="icon-close" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile dropdown menu — hidden by default, toggled by the button above.
+           md:hidden ensures it can never appear on desktop even if JS misfires.  -->
+      <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-white">
+        <nav class="max-w-6xl mx-auto px-4 py-2 flex flex-col">
+          {navLinks.map(link => (
+            <a
+              href={link.href}
+              class:list={[
+                'py-3 text-sm font-medium border-b border-slate-50 last:border-0 transition-colors',
+                currentPath == link.href
+                  ? 'text-emerald-700'
+                  : 'text-slate-700 hover:text-slate-900',
+              ]}
+            >
+              {link.label}
+            </a>
+          ))}
+        </nav>
+      </div>
+
     </header>
+    <!-- ─── End Header ─────────────────────────────────────────────────────── -->
 
     <!-- flex-1 makes main grow to fill the space, pushing the footer to the bottom -->
     <main class="flex-1">
@@ -130,3 +177,33 @@ const currentPath = Astro.url.pathname;
 
   </body>
 </html>
+
+<!-- ─── Mobile nav toggle script ──────────────────────────────────────────────
+     Astro bundles this as a JS module (runs deferred, after the DOM is ready).
+     Kept here rather than a separate file since it only serves this layout.    -->
+<script>
+  const toggle = document.getElementById('nav-toggle') as HTMLButtonElement;
+  const menu   = document.getElementById('mobile-menu') as HTMLElement;
+  const iconOpen  = document.getElementById('icon-open')  as HTMLElement;
+  const iconClose = document.getElementById('icon-close') as HTMLElement;
+
+  toggle?.addEventListener('click', () => {
+    const opening = menu.classList.contains('hidden');
+    menu.classList.toggle('hidden');
+    iconOpen.classList.toggle('hidden');
+    iconClose.classList.toggle('hidden');
+    toggle.setAttribute('aria-expanded', String(opening));
+    toggle.setAttribute('aria-label', opening ? 'Navigation schließen' : 'Navigation öffnen');
+  });
+
+  // Close the menu automatically when the user taps a link inside it
+  menu?.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      menu.classList.add('hidden');
+      iconOpen.classList.remove('hidden');
+      iconClose.classList.add('hidden');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Navigation öffnen');
+    });
+  });
+</script>
