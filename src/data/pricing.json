@@ -35,6 +35,10 @@
       "type": "Gastspieler",
       "price": "10 €/Spiel",
       "note": "Maximal 3x jährlich"
+    },
+    {
+      "type": "Boulespieler",
+      "price": "25 €/Jahr"
     }
   ]
 }
