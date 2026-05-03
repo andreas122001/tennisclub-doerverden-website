@@ -1,0 +1,75 @@
+/*
+ * Design tokens for TC Dörverden
+ * ─────────────────────────────────────────────────────────────────────────────
+ * This file is the single source of truth for all colors and typography.
+ * Change a value here and it updates everywhere on the site automatically —
+ * no need to touch any page or layout file.
+ *
+ * HOW RETHEME WORKS
+ * Tailwind v4 generates utility classes (e.g. `bg-emerald-700`) from CSS
+ * custom properties defined in @theme blocks. The values below override
+ * Tailwind's built-in defaults, so every class that uses these color names
+ * will pick up your new values at build time.
+ *
+ * CHANGING THE BRAND COLOR
+ * Replace the values in the "Brand" section with a new color scale.
+ * The free tool https://uicolors.app lets you generate a full 50–950 scale
+ * from a single hex color — copy the oklch values from there.
+ *
+ * CHANGING THE NEUTRAL
+ * The site uses "slate" (a cool blue-gray). For a warmer feel, try "zinc"
+ * or "stone". Replace the entire Neutral section with the new palette's values.
+ */
+
+@theme {
+
+  /* ── Brand ──────────────────────────────────────────────────────────────
+   * The main club color. Currently: emerald green.
+   * Used for: primary buttons, active nav link, post/event links,
+   *           search focus ring, event left-border stripe, pinned badge.
+   * ─────────────────────────────────────────────────────────────────────── */
+
+  --color-emerald-50:  oklch(0.979 0.021 166.113); /* very light tint — badge bg, CTA strip bg  */
+  --color-emerald-100: oklch(0.950 0.052 163.051); /* light tint      — CTA strip border        */
+  --color-emerald-500: oklch(0.696 0.170 162.480); /* medium accent   — event sidebar border     */
+  --color-emerald-700: oklch(0.527 0.154 150.069); /* MAIN brand color — buttons, links          */
+  --color-emerald-800: oklch(0.432 0.095 166.913); /* dark brand      — button hover state       */
+
+
+  /* ── Neutral ────────────────────────────────────────────────────────────
+   * Blue-gray scale used for all text, backgrounds, and borders.
+   * Currently: "slate". For a warmer look, swap all values to zinc/stone.
+   * ─────────────────────────────────────────────────────────────────────── */
+
+  /* --- Backgrounds --- */
+  --color-slate-50:  oklch(0.984 0.003 247.858); /* page hover states                          */
+  --color-slate-100: oklch(0.968 0.007 247.896); /* card / mobile-nav / raised surfaces        */
+
+  /* --- Borders --- */
+  --color-slate-200: oklch(0.929 0.013 255.508); /* header bottom border, standard dividers    */
+  --color-slate-300: oklch(0.869 0.022 252.894); /* input borders, pagination buttons          */
+
+  /* --- Text --- */
+  --color-slate-400: oklch(0.704 0.040 256.788); /* timestamps, faint labels                  */
+  --color-slate-500: oklch(0.554 0.046 257.417); /* muted text, empty-state messages          */
+  --color-slate-600: oklch(0.446 0.043 257.281); /* secondary text, desktop nav links         */
+  --color-slate-700: oklch(0.372 0.044 257.287); /* mobile nav links, footer divider          */
+  --color-slate-800: oklch(0.279 0.041 260.031); /* body copy                                 */
+  --color-slate-900: oklch(0.208 0.042 265.755); /* headings, logo, strongest text            */
+
+  /* --- Inverted / dark surfaces (footer) --- */
+  /* The footer uses bg-slate-900 (above) as its background.
+   * Text on top of it uses the lighter slate shades + white (unchanged). */
+
+
+  /* ── Typography ─────────────────────────────────────────────────────────
+   * The site uses the browser's system sans-serif via Tailwind's default
+   * font stack. To switch to a web font (e.g. Inter from Google Fonts):
+   *   1. Add  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+   *      inside <head> in src/layouts/BaseLayout.astro
+   *   2. Replace the value below with:  'Inter', ui-sans-serif, system-ui, sans-serif
+   * ─────────────────────────────────────────────────────────────────────── */
+
+  --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+
+}

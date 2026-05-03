@@ -4,6 +4,10 @@
    Used on pages that render CMS Markdown content (About, Impressum, posts…). */
 @plugin "@tailwindcss/typography";
 
+/* Design tokens — colors and typography.
+   Imported after tailwindcss so our @theme values override the built-in defaults. */
+@import "./tokens.css";
+
 @layer base {
   html {
     scroll-behavior: smooth; /* Smooth scroll for any in-page anchor links */
