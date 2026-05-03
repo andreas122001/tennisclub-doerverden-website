@@ -1,13 +1,22 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import pricingData from '../data/pricing.json'; // Content managed via CMS → src/data/pricing.json
+import { getEntry, render } from 'astro:content';
+
+// All pricing data (title, intro, table) lives in frontmatter; the body is the conclusion.
+const entry = (await getEntry('pages', 'pricing'))!;
+const { Content } = await render(entry);
+
+// Cast to a typed shape — the pages schema uses catchall() so extra fields are untyped
+type PricingRow = { type: string; price: string; note?: string };
+type PricingData = { title: string; intro?: string; table: PricingRow[] };
+const data = entry.data as unknown as PricingData;
 ---
 
-<BaseLayout title={pricingData.title}>
+<BaseLayout title={data.title}>
   <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <h1 class="text-3xl font-bold text-slate-900 mb-4">{pricingData.title}</h1>
-    {pricingData.intro && (
-      <p class="text-slate-600 mb-8">{pricingData.intro}</p>
+    <h1 class="text-3xl font-bold text-slate-900 mb-4">{data.title}</h1>
+    {data.intro && (
+      <p class="text-slate-600 mb-8">{data.intro}</p>
     )}
 
     <!-- overflow-x-auto lets the table scroll horizontally on narrow screens
@@ -22,7 +31,7 @@ import pricingData from '../data/pricing.json'; // Content managed via CMS → s
           </tr>
         </thead>
         <tbody>
-          {pricingData.table.map(row => (
+          {data.table.map(row => (
             <tr class="border-b border-slate-100">
               <td class="py-3 pr-6 text-slate-800">{row.type}</td>
               <td class="py-3 pr-6 text-right font-medium text-slate-900">{row.price}</td>
@@ -32,8 +41,10 @@ import pricingData from '../data/pricing.json'; // Content managed via CMS → s
         </tbody>
       </table>
     </div>
-    {pricingData.conclusion && (
-      <p class="mt-8 text-slate-600 mb-8">{pricingData.conclusion}</p>
-    )}
+
+    <!-- Conclusion rendered from the markdown body of pricing.md -->
+    <div class="prose prose-slate max-w-none mt-8">
+      <Content />
+    </div>
   </div>
 </BaseLayout>

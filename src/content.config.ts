@@ -26,14 +26,12 @@ const gallery = defineCollection({
   }),
 });
 
-// Singleton Markdown pages: about, impressum, datenschutz.
-// Each file's id is its filename without the extension (e.g. "about" for about.md).
-// The body (Markdown content) is accessed via render() in the page component.
+// Singleton Markdown pages: about, impressum, datenschutz, pricing, etc.
+// passthrough() lets individual pages carry extra frontmatter fields (e.g. pricing
+// has intro + table) without breaking the schema for simpler pages.
 const pages = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/pages' }),
-  schema: z.object({
-    title: z.string(),
-  }),
+  schema: z.object({ title: z.string() }).catchall(z.unknown()),
 });
 
 // Upcoming club events: title, date, optional description, location, and a link to a related post.
