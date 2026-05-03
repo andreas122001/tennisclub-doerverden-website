@@ -107,69 +107,69 @@ const photos = items.filter(item => item.data.image);
      Collects all thumbnail src/alt values at page load so the lightbox can
      display them without making extra network requests.                        -->
 <script>
-  // Build a flat list of { src, alt } from every thumbnail on the page
-  const triggers = Array.from(document.querySelectorAll<HTMLImageElement>('.lightbox-trigger'));
-  const photos   = triggers.map(img => ({ src: img.src, alt: img.alt }));
+  // astro:page-load fires on initial load AND after every client-side navigation
+  document.addEventListener('astro:page-load', () => {
+    const triggers  = Array.from(document.querySelectorAll<HTMLImageElement>('.lightbox-trigger'));
+    const photos    = triggers.map(img => ({ src: img.src, alt: img.alt }));
+    const lightbox  = document.getElementById('lightbox')!;
+    const lbImg     = document.getElementById('lb-img')     as HTMLImageElement;
+    const lbCaption = document.getElementById('lb-caption')!;
+    const lbCounter = document.getElementById('lb-counter')!;
+    const lbClose   = document.getElementById('lb-close')!;
+    const lbPrev    = document.getElementById('lb-prev')!;
+    const lbNext    = document.getElementById('lb-next')!;
 
-  const lightbox  = document.getElementById('lightbox')!;
-  const lbImg     = document.getElementById('lb-img')     as HTMLImageElement;
-  const lbCaption = document.getElementById('lb-caption')!;
-  const lbCounter = document.getElementById('lb-counter')!;
-  const lbClose   = document.getElementById('lb-close')!;
-  const lbPrev    = document.getElementById('lb-prev')!;
-  const lbNext    = document.getElementById('lb-next')!;
+    if (!lightbox || triggers.length === 0) return;
 
-  let current = 0;
+    let current = 0;
 
-  function show(index: number) {
-    current = (index + photos.length) % photos.length; // wrap around
-    const photo = photos[current];
-    lbImg.src        = photo.src;
-    lbImg.alt        = photo.alt;
-    lbCaption.textContent = photo.alt;
-    lbCaption.classList.toggle('hidden', !photo.alt);
-    lbCounter.textContent = `${current + 1} / ${photos.length}`;
-  }
+    const showPhoto = (index: number) => {
+      current = (index + photos.length) % photos.length;
+      const photo = photos[current];
+      lbImg.src = photo.src;
+      lbImg.alt = photo.alt;
+      lbCaption.textContent = photo.alt;
+      lbCaption.classList.toggle('hidden', !photo.alt);
+      lbCounter.textContent = `${current + 1} / ${photos.length}`;
+    };
 
-  function open(index: number) {
-    show(index);
-    lightbox.classList.remove('hidden');
-    document.body.style.overflow = 'hidden'; // prevent background scroll
-    lbClose.focus();
-  }
+    const openLightbox = (index: number) => {
+      showPhoto(index);
+      lightbox.classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+      lbClose.focus();
+    };
 
-  function close() {
-    lightbox.classList.add('hidden');
-    document.body.style.overflow = '';
-    // Return focus to the thumbnail that opened the lightbox
-    triggers[current]?.focus();
-  }
+    const closeLightbox = () => {
+      lightbox.classList.add('hidden');
+      document.body.style.overflow = '';
+      triggers[current]?.focus();
+    };
 
-  // Open on thumbnail click
-  triggers.forEach((img, i) => {
-    // Make thumbnails keyboard-accessible
-    img.setAttribute('tabindex', '0');
-    img.setAttribute('role', 'button');
-    img.addEventListener('click', () => open(i));
-    img.addEventListener('keydown', (e: KeyboardEvent) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(i); }
+    triggers.forEach((img, i) => {
+      img.setAttribute('tabindex', '0');
+      img.setAttribute('role', 'button');
+      img.addEventListener('click', () => openLightbox(i));
+      img.addEventListener('keydown', (e: KeyboardEvent) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(i); }
+      });
     });
-  });
 
-  lbClose.addEventListener('click', close);
-  lbPrev.addEventListener('click',  () => show(current - 1));
-  lbNext.addEventListener('click',  () => show(current + 1));
+    lbClose.addEventListener('click', closeLightbox);
+    lbPrev.addEventListener('click',  () => showPhoto(current - 1));
+    lbNext.addEventListener('click',  () => showPhoto(current + 1));
 
-  // Click the dark backdrop (not the image) to close
-  lightbox.addEventListener('click', (e: MouseEvent) => {
-    if (e.target === lightbox) close();
-  });
+    lightbox.addEventListener('click', (e: MouseEvent) => {
+      if (e.target === lightbox) closeLightbox();
+    });
 
-  // Keyboard: Escape closes, arrows navigate
-  document.addEventListener('keydown', (e: KeyboardEvent) => {
-    if (lightbox.classList.contains('hidden')) return;
-    if (e.key === 'Escape')     close();
-    if (e.key === 'ArrowLeft')  show(current - 1);
-    if (e.key === 'ArrowRight') show(current + 1);
+    // Keyboard navigation — scoped to this page-load so it doesn't accumulate
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (lightbox.classList.contains('hidden')) return;
+      if (e.key === 'Escape')     closeLightbox();
+      if (e.key === 'ArrowLeft')  showPhoto(current - 1);
+      if (e.key === 'ArrowRight') showPhoto(current + 1);
+    };
+    document.addEventListener('keydown', onKeyDown);
   });
 </script>

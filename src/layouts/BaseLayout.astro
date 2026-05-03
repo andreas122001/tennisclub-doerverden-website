@@ -4,14 +4,23 @@
 // The <slot /> below is where that content gets inserted.
 
 import '../styles/global.css';
+import { ClientRouter } from 'astro:transitions';
 import contactData from '../data/contact.json'; // Footer reads live from contact.json
 
 interface Props {
   title: string;
   description?: string; // Used as the meta description for SEO
+  ogImage?: string;     // Absolute or root-relative path for the og:image preview
 }
 
-const { title, description = 'Willkommen beim Tennisclub' } = Astro.props;
+const {
+  title,
+  description = 'Willkommen beim Tennisclub Dörverden e.V.',
+  ogImage = '/uploads/IMG_1253.jpg',
+} = Astro.props;
+
+// Build an absolute URL for og:image — required by the Open Graph spec
+const ogImageAbsolute = new URL(ogImage, Astro.url).href;
 
 const navLinks = [
   { href: '/', label: 'Startseite' },
@@ -32,6 +41,19 @@ const currentPath = Astro.url.pathname;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <title>{title} — Tennisclub</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <!-- Inter font — preconnect first so the browser opens the connection early -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+    <!-- Open Graph — controls the preview card when the URL is shared on social media -->
+    <meta property="og:type"        content="website" />
+    <meta property="og:title"       content={`${title} — Tennisclub`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image"       content={ogImageAbsolute} />
+    <meta name="twitter:card"       content="summary_large_image" />
+    <!-- Smooth page transitions (Astro built-in, no JS framework needed) -->
+    <ClientRouter />
   </head>
   <body class="min-h-screen flex flex-col bg-white text-slate-800">
 
@@ -130,25 +152,21 @@ const currentPath = Astro.url.pathname;
                 )}
           </div>
           <div>
-            <contact class="text-sm space-y-1">
-              <div>
-                <p class="font-semibold text-white mb-2">Telefon  </p>
-                <div class="flex">
-                  <p class="text-slate-400 w-20 shrink-0">Tennis</p>
-                  <a href={`tel:${contactData.phone_tennis}`} class="hover:text-white transition-colors text-right">
-                    {contactData.phone_tennis}
-                  </a>
-                </div>
-                <div class="flex">
-                  <p class="text-slate-400 w-20 shrink-0">Boule</p>
-                  <a href={`tel:${contactData.phone_boule}`} class="hover:text-white transition-colors text-right">
-                    {contactData.phone_boule}
-                  </a>
-                </div>
+            <p class="font-semibold text-white mb-2">Telefon</p>
+            <div class="text-sm space-y-1">
+              <div class="flex">
+                <p class="text-slate-400 w-20 shrink-0">Tennis</p>
+                <a href={`tel:${contactData.phone_tennis}`} class="hover:text-white transition-colors">
+                  {contactData.phone_tennis}
+                </a>
               </div>
-              <div>
-
+              <div class="flex">
+                <p class="text-slate-400 w-20 shrink-0">Boule</p>
+                <a href={`tel:${contactData.phone_boule}`} class="hover:text-white transition-colors">
+                  {contactData.phone_boule}
+                </a>
               </div>
+            </div>
           </div>
           <div>
             <p class="font-semibold text-white mb-2">Öffnungszeiten</p>
@@ -179,31 +197,36 @@ const currentPath = Astro.url.pathname;
 </html>
 
 <!-- ─── Mobile nav toggle script ──────────────────────────────────────────────
-     Astro bundles this as a JS module (runs deferred, after the DOM is ready).
-     Kept here rather than a separate file since it only serves this layout.    -->
+     Wrapped in astro:page-load so it re-runs after every ClientRouter
+     navigation — without this the listeners are lost on page transitions.      -->
 <script>
-  const toggle = document.getElementById('nav-toggle') as HTMLButtonElement;
-  const menu   = document.getElementById('mobile-menu') as HTMLElement;
-  const iconOpen  = document.getElementById('icon-open')  as HTMLElement;
-  const iconClose = document.getElementById('icon-close') as HTMLElement;
+  function initNav() {
+    const toggle    = document.getElementById('nav-toggle')  as HTMLButtonElement;
+    const menu      = document.getElementById('mobile-menu') as HTMLElement;
+    const iconOpen  = document.getElementById('icon-open')   as HTMLElement;
+    const iconClose = document.getElementById('icon-close')  as HTMLElement;
 
-  toggle?.addEventListener('click', () => {
-    const opening = menu.classList.contains('hidden');
-    menu.classList.toggle('hidden');
-    iconOpen.classList.toggle('hidden');
-    iconClose.classList.toggle('hidden');
-    toggle.setAttribute('aria-expanded', String(opening));
-    toggle.setAttribute('aria-label', opening ? 'Navigation schließen' : 'Navigation öffnen');
-  });
-
-  // Close the menu automatically when the user taps a link inside it
-  menu?.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => {
-      menu.classList.add('hidden');
-      iconOpen.classList.remove('hidden');
-      iconClose.classList.add('hidden');
-      toggle.setAttribute('aria-expanded', 'false');
-      toggle.setAttribute('aria-label', 'Navigation öffnen');
+    toggle?.addEventListener('click', () => {
+      const opening = menu.classList.contains('hidden');
+      menu.classList.toggle('hidden');
+      iconOpen.classList.toggle('hidden');
+      iconClose.classList.toggle('hidden');
+      toggle.setAttribute('aria-expanded', String(opening));
+      toggle.setAttribute('aria-label', opening ? 'Navigation schließen' : 'Navigation öffnen');
     });
-  });
+
+    // Close the menu automatically when the user taps a link inside it
+    menu?.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        menu.classList.add('hidden');
+        iconOpen.classList.remove('hidden');
+        iconClose.classList.add('hidden');
+        toggle.setAttribute('aria-expanded', 'false');
+        toggle.setAttribute('aria-label', 'Navigation öffnen');
+      });
+    });
+  }
+
+  // astro:page-load fires on initial load AND after every client-side navigation
+  document.addEventListener('astro:page-load', initNav);
 </script>

@@ -89,55 +89,57 @@ const sortedPosts = allPosts.sort((a, b) => {
 </BaseLayout>
 
 <script>
-  const PAGE_SIZE = 10;
+  document.addEventListener('astro:page-load', () => {
+    const PAGE_SIZE = 10;
 
-  const articles  = Array.from(document.querySelectorAll<HTMLElement>('#posts-list article'));
-  const search    = document.getElementById('search')    as HTMLInputElement;
-  const noResults = document.getElementById('no-results') as HTMLElement;
-  const pagination = document.getElementById('pagination') as HTMLElement;
-  const pageInfo  = document.getElementById('page-info') as HTMLElement;
-  const prevBtn   = document.getElementById('prev-btn')  as HTMLButtonElement;
-  const nextBtn   = document.getElementById('next-btn')  as HTMLButtonElement;
+    const articles   = Array.from(document.querySelectorAll<HTMLElement>('#posts-list article'));
+    const search     = document.getElementById('search')     as HTMLInputElement;
+    const noResults  = document.getElementById('no-results')  as HTMLElement;
+    const pagination = document.getElementById('pagination')  as HTMLElement;
+    const pageInfo   = document.getElementById('page-info')   as HTMLElement;
+    const prevBtn    = document.getElementById('prev-btn')    as HTMLButtonElement;
+    const nextBtn    = document.getElementById('next-btn')    as HTMLButtonElement;
 
-  let filtered = articles;
-  let page = 0;
+    if (!search) return;
 
-  function render() {
-    const query = search.value.trim().toLowerCase();
-    const searching = query.length > 0;
+    let filtered = articles;
+    let page = 0;
 
-    filtered = searching
-      ? articles.filter(a => a.dataset.search!.toLowerCase().includes(query))
-      : articles;
+    const render = () => {
+      const query     = search.value.trim().toLowerCase();
+      const searching = query.length > 0;
 
-    articles.forEach(a => a.classList.add('hidden'));
-    noResults.classList.add('hidden');
+      filtered = searching
+        ? articles.filter(a => a.dataset.search!.toLowerCase().includes(query))
+        : articles;
 
-    if (filtered.length === 0) {
-      noResults.classList.remove('hidden');
-      pagination.classList.add('hidden');
-      return;
-    }
+      articles.forEach(a => a.classList.add('hidden'));
+      noResults.classList.add('hidden');
 
-    if (searching) {
-      // Show all matches at once — typically a small set
-      filtered.forEach(a => a.classList.remove('hidden'));
-      pagination.classList.add('hidden');
-    } else {
-      const start = page * PAGE_SIZE;
-      filtered.slice(start, start + PAGE_SIZE).forEach(a => a.classList.remove('hidden'));
+      if (filtered.length === 0) {
+        noResults.classList.remove('hidden');
+        pagination.classList.add('hidden');
+        return;
+      }
 
-      const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
-      pageInfo.textContent = `Seite ${page + 1} von ${totalPages}`;
-      prevBtn.disabled = page === 0;
-      nextBtn.disabled = page >= totalPages - 1;
-      pagination.classList.toggle('hidden', filtered.length <= PAGE_SIZE);
-    }
-  }
+      if (searching) {
+        filtered.forEach(a => a.classList.remove('hidden'));
+        pagination.classList.add('hidden');
+      } else {
+        const start      = page * PAGE_SIZE;
+        const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+        filtered.slice(start, start + PAGE_SIZE).forEach(a => a.classList.remove('hidden'));
+        pageInfo.textContent = `Seite ${page + 1} von ${totalPages}`;
+        prevBtn.disabled = page === 0;
+        nextBtn.disabled = page >= totalPages - 1;
+        pagination.classList.toggle('hidden', filtered.length <= PAGE_SIZE);
+      }
+    };
 
-  search.addEventListener('input', () => { page = 0; render(); });
-  prevBtn.addEventListener('click', () => { page--; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
-  nextBtn.addEventListener('click', () => { page++; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    search.addEventListener('input', () => { page = 0; render(); });
+    prevBtn.addEventListener('click', () => { page--; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    nextBtn.addEventListener('click', () => { page++; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
 
-  render();
+    render();
+  });
 </script>

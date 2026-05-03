@@ -8,6 +8,12 @@
    Imported after tailwindcss so our @theme values override the built-in defaults. */
 @import "./tokens.css";
 
+/* View transition speed — lower = snappier. Default is ~180ms. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 120ms;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth; /* Smooth scroll for any in-page anchor links */

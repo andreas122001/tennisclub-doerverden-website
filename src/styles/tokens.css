@@ -70,6 +70,6 @@
    *   2. Replace the value below with:  'Inter', ui-sans-serif, system-ui, sans-serif
    * ─────────────────────────────────────────────────────────────────────── */
 
-  --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
 
 }

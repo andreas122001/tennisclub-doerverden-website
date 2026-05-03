@@ -78,9 +78,9 @@ const half = 1.5;                       // half-width of the separator stripe (%
       />
     )}
 
-    <!-- Text overlay -->
-    <div class="relative z-20 text-center px-4 py-16">
-      <p class="text-sm font-semibold text-white/60 uppercase tracking-widest mb-3">Willkommen beim</p>
+    <!-- Text overlay — [text-shadow:...] ensures legibility over any image -->
+    <div class="relative z-20 text-center px-4 py-16 [text-shadow:0_2px_12px_rgba(0,0,0,0.55)]">
+      <p class="text-sm font-semibold text-white/70 uppercase tracking-widest mb-3">Willkommen beim</p>
       <h1 class="text-4xl sm:text-5xl font-bold text-white mb-4">
         {homeData.heroTitle}
       </h1>
