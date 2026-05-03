@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import galleryData from '../data/gallery.json';
 
 const items = await getCollection('gallery');
 // Filter out placeholder entries where the owner hasn't uploaded an image yet
@@ -9,7 +10,10 @@ const photos = items.filter(item => item.data.image);
 
 <BaseLayout title="Galerie">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <h1 class="text-3xl font-bold text-slate-900 mb-8">Galerie</h1>
+    <h1 class="text-3xl font-bold text-slate-900 mb-4">Galerie</h1>
+    {galleryData.intro && (
+      <p class="text-slate-600 mb-8 max-w-xl">{galleryData.intro}</p>
+    )}
 
     {photos.length === 0 ? (
       <p class="text-slate-500">Noch keine Fotos vorhanden.</p>

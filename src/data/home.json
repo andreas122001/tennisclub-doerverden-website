@@ -4,5 +4,8 @@
   "heroImageLeft": "/uploads/IMG_1253.jpg",
   "heroImageRight": "/uploads/IMG_1269.jpg",
   "heroSeparation": 65,
-  "heroSeparationSlant": 6
+  "heroSeparationSlant": 6,
+  "ctaEnabled": true,
+  "ctaTitle": "Interesse am Tennissport?",
+  "ctaText": "Wir freuen uns über neue Mitglieder jeder Altersklasse und jeden Niveaus."
 }

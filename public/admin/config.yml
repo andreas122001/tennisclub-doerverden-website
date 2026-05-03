@@ -28,6 +28,9 @@ collections:
           - { label: "Hero Bild 2 (rechts)",     name: "heroImage2",      widget: "image",  required: false }
           - { label: "Trenner-Position (0–100)", name: "heroSeparation",     widget: "number", default: 55,  value_type: "int",   min: 0, max: 100, required: false }
           - { label: "Trenner-Schrägheit (0–20)", name: "heroSeparationSlant", widget: "number", default: 7, value_type: "float", min: 0, max: 20,  required: false }
+          - { label: "CTA-Leiste anzeigen",  name: "ctaEnabled", widget: "boolean", default: true, required: false }
+          - { label: "CTA-Titel",            name: "ctaTitle",   widget: "string",  required: false }
+          - { label: "CTA-Text",             name: "ctaText",    widget: "text",    required: false }
 
       - name: "contact"
         label: "Kontakt"
@@ -38,6 +41,7 @@ collections:
           - { label: "Telefon für Tennis",  name: "phone_tennis", widget: "string", required: false }
           - { label: "Telefon für Boule",   name: "phone_boule",  widget: "string", required: false }
           - { label: "E-Mail",              name: "email",        widget: "string", required: false }
+          - { label: "Mitgliedschaft (Text auf Kontaktseite)", name: "membershipText", widget: "text", required: false }
           - label: "Öffnungszeiten"
             name: "openingHours"
             widget: "list"
@@ -59,6 +63,12 @@ collections:
               - { label: "Mitgliedschaft", name: "type",  widget: "string" }
               - { label: "Beitrag",        name: "price", widget: "string" }
               - { label: "Anmerkung",      name: "note",  widget: "string", required: false }
+
+      - name: "gallery"
+        label: "Galerie"
+        file: "src/data/gallery.json"
+        fields:
+          - { label: "Einleitung", name: "intro", widget: "text", required: false }
 
       - name: "about"
         label: "Über uns"

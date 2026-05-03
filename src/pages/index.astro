@@ -92,18 +92,20 @@ const half = 1.5;                       // half-width of the separator stripe (%
     </div>
   </section>
 
-  <!-- ── CTA strip ────────────────────────────────────────────────────────── -->
-  <section class="bg-emerald-50 border-y border-emerald-100">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
-      <h2 class="text-2xl font-bold text-slate-900 mb-2">Interesse am Tennissport?</h2>
-      <p class="text-slate-600 mb-6 max-w-md mx-auto">
-        Wir freuen uns über neue Mitglieder jeder Altersklasse und jeden Niveaus.
-      </p>
-      <a href="/kontakt" class="inline-block px-6 py-3 bg-emerald-700 text-white font-semibold rounded-lg hover:bg-emerald-800 transition-colors">
-        Mitglied werden →
-      </a>
-    </div>
-  </section>
+  <!-- ── CTA strip — shown only when ctaEnabled is true in home.json ────────── -->
+  {homeData.ctaEnabled && (
+    <section class="bg-emerald-50 border-y border-emerald-100">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
+        <h2 class="text-2xl font-bold text-slate-900 mb-2">{homeData.ctaTitle}</h2>
+        {homeData.ctaText && (
+          <p class="text-slate-600 mb-6 max-w-md mx-auto">{homeData.ctaText}</p>
+        )}
+        <a href="/kontakt" class="inline-block px-6 py-3 bg-emerald-700 text-white font-semibold rounded-lg hover:bg-emerald-800 transition-colors">
+          Mitglied werden →
+        </a>
+      </div>
+    </section>
+  )}
 
   <!-- ── Main content: posts feed (left) + events sidebar (right) ─────────── -->
   <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">

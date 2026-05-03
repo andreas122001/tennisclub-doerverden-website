@@ -5,7 +5,7 @@ import contactData from '../data/contact.json'; // Content managed via CMS → s
 
 <BaseLayout title="Kontakt">
   <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-    <h1 class="text-3xl font-bold text-slate-900 mb-8">Kontakt</h1>
+    <h1 class="text-3xl font-bold text-slate-900 mb-4">Kontakt</h1>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-10">
       <div>
@@ -57,6 +57,11 @@ import contactData from '../data/contact.json'; // Content managed via CMS → s
           ))}
         </dl>
       </div>
+    </div>
+    <div class="mt-12">
+      {contactData.membershipText && (
+        <p class="text-slate-600 mb-10 max-w-xl leading-relaxed">{contactData.membershipText}</p>
+      )}
     </div>
   </div>
 </BaseLayout>
