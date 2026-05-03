@@ -16,12 +16,21 @@ import contactData from '../data/contact.json'; // Content managed via CMS → s
           {contactData.city}
         </address>
 
-        {contactData.phone && (
+        {contactData.phone_tennis && (
           <div class="mt-6">
-            <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500 mb-2">Telefon</h2>
+            <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500 mb-2">Telefon Tennis</h2>
             <!-- tel: makes the number tappable on mobile -->
-            <a href={`tel:${contactData.phone}`} class="text-slate-800 hover:text-emerald-700 transition-colors">
-              {contactData.phone}
+            <a href={`tel:${contactData.phone_tennis}`} class="text-slate-800 hover:text-emerald-700 transition-colors">
+              {contactData.phone_tennis}
+            </a>
+          </div>
+        )}
+
+        {contactData.phone_boule && (
+          <div class="mt-6">
+            <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500 mb-2">Telefon Boule</h2>
+            <a href={`tel:${contactData.phone_boule}`} class="text-slate-800 hover:text-emerald-700 transition-colors">
+              {contactData.phone_boule}
             </a>
           </div>
         )}

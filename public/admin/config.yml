@@ -26,16 +26,18 @@ collections:
           - { label: "Hero Untertitel", name: "heroSubtitle", widget: "string",  required: false }
           - { label: "Hero Bild",       name: "heroImage",    widget: "image",   required: false }
           - { label: "Hero Bild 2 (rechts)",     name: "heroImage2",      widget: "image",  required: false }
-          - { label: "Trenner-Position (0–100)", name: "heroSeparation",  widget: "number", default: 55, value_type: "int", min: 0, max: 100, required: false }
+          - { label: "Trenner-Position (0–100)", name: "heroSeparation",     widget: "number", default: 55,  value_type: "int",   min: 0, max: 100, required: false }
+          - { label: "Trenner-Schrägheit (0–20)", name: "heroSeparationSlant", widget: "number", default: 7, value_type: "float", min: 0, max: 20,  required: false }
 
       - name: "contact"
         label: "Kontakt"
         file: "src/data/contact.json"
         fields:
-          - { label: "Straße / Hausnummer", name: "address", widget: "string" }
-          - { label: "PLZ / Ort",           name: "city",    widget: "string" }
-          - { label: "Telefon",             name: "phone",   widget: "string", required: false }
-          - { label: "E-Mail",              name: "email",   widget: "string", required: false }
+          - { label: "Straße / Hausnummer", name: "address",      widget: "string" }
+          - { label: "PLZ / Ort",           name: "city",         widget: "string" }
+          - { label: "Telefon für Tennis",  name: "phone_tennis", widget: "string", required: false }
+          - { label: "Telefon für Boule",   name: "phone_boule",  widget: "string", required: false }
+          - { label: "E-Mail",              name: "email",        widget: "string", required: false }
           - label: "Öffnungszeiten"
             name: "openingHours"
             widget: "list"
@@ -47,8 +49,9 @@ collections:
         label: "Preise"
         file: "src/data/pricing.json"
         fields:
-          - { label: "Überschrift", name: "title", widget: "string" }
-          - { label: "Einleitung",  name: "intro", widget: "text",   required: false }
+          - { label: "Überschrift",   name: "title", widget: "string" }
+          - { label: "Einleitung",    name: "intro", widget: "text",   required: false }
+          - { label: "Weitere Info",  name: "conclusion", widget: "text",   required: false }
           - label: "Preistabelle"
             name: "table"
             widget: "list"

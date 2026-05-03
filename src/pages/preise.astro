@@ -25,12 +25,15 @@ import pricingData from '../data/pricing.json'; // Content managed via CMS → s
           {pricingData.table.map(row => (
             <tr class="border-b border-slate-100">
               <td class="py-3 pr-6 text-slate-800">{row.type}</td>
-              <td class="py-3 pr-6 font-medium text-slate-900">{row.price}</td>
+              <td class="py-3 pr-6 text-right font-medium text-slate-900">{row.price}</td>
               <td class="py-3 text-slate-500 text-sm">{row.note}</td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
+    {pricingData.conclusion && (
+      <p class="mt-8 text-slate-600 mb-8">{pricingData.conclusion}</p>
+    )}
   </div>
 </BaseLayout>

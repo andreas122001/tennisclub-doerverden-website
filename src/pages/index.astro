@@ -10,7 +10,7 @@ const sortedPosts = posts.sort((a, b) => b.data.date.getTime() - a.data.date.get
 
 // Slash geometry constants — tweak to taste
 const sep = homeData.heroSeparation;   // 0–100: position of the slash centre
-const slant = 6;                       // how many % the diagonal deviates from vertical
+const slant = homeData.heroSeparationSlant;  // how many % the diagonal deviates from vertical
 const half = 1.5;                       // half-width of the separator stripe (%)
 ---
 
@@ -22,25 +22,25 @@ const half = 1.5;                       // half-width of the separator stripe (%
     style={`--sep:${sep}; --slant:${slant}; --half:${half}`}
   >
     <!-- Left image — clipped to the left of the slash -->
-    {homeData.heroImage && (
+    {homeData.heroImageLeft && (
       <Image
-        src={homeData.heroImage}
+        src={homeData.heroImageLeft}
         alt=""
         width={1920}
         height={1080}
         loading="eager"
         fetchpriority="high"
         class="absolute inset-0 w-full h-full object-cover opacity-60"
-        style={homeData.heroImage2
+        style={homeData.heroImageRight
           ? "clip-path: polygon(0 0, calc(var(--sep)*1% + var(--slant)*1%) 0, calc(var(--sep)*1% - var(--slant)*1%) 100%, 0 100%)"
           : undefined}
       />
     )}
 
     <!-- Right image — clipped to the right of the slash -->
-    {homeData.heroImage2 && (
+    {homeData.heroImageRight && (
       <Image
-        src={homeData.heroImage2}
+        src={homeData.heroImageRight}
         alt=""
         width={1920}
         height={1080}
@@ -51,7 +51,7 @@ const half = 1.5;                       // half-width of the separator stripe (%
     )}
 
     <!-- Diagonal separator stripe -->
-    {homeData.heroImage2 && (
+    {homeData.heroImageRight && (
       <div
         class="absolute inset-0 z-10 bg-white/50"
         style="clip-path: polygon(

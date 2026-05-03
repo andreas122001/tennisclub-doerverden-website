@@ -16,7 +16,7 @@ const { title, description = 'Willkommen beim Tennisclub' } = Astro.props;
 const navLinks = [
   { href: '/', label: 'Startseite' },
   { href: '/ueber-uns', label: 'Über uns' },
-  { href: '/preise', label: 'Preise' },
+  { href: '/preise', label: 'Beiträge' },
   { href: '/galerie', label: 'Galerie' },
   { href: '/kontakt', label: 'Kontakt' },
   { href: '/impressum', label: 'Impressum' },
@@ -70,26 +70,37 @@ const currentPath = Astro.url.pathname;
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div class="grid grid-cols-1 sm:grid-cols-4 gap-8">
           <div>
-            <p class="font-semibold text-white mb-2">Tennisclub</p>
+            <p class="font-semibold text-white mb-2">Adresse</p>
             <!-- not-italic: browsers render <address> in italic by default -->
             <address class="not-italic text-sm leading-relaxed">
               {contactData.address},<br />
               {contactData.city}<br />
             </address>
+                            {contactData.email && (
+                    <a href={`mailto:${contactData.email}`} class="text-sm hover:text-white transition-colors">
+                      {contactData.email}
+                    </a>
+                )}
           </div>
           <div>
             <contact class="text-sm space-y-1">
               <div>
-                <span class="font-semibold text-white">Telefon:</span><br />
-                <a href={`tel:${contactData.phone}`} class="hover:text-white transition-colors">
-                  {contactData.phone}
-                </a>
+                <p class="font-semibold text-white mb-2">Telefon  </p>
+                <div class="flex">
+                  <p class="text-slate-400 w-20 shrink-0">Tennis</p>
+                  <a href={`tel:${contactData.phone_tennis}`} class="hover:text-white transition-colors text-right">
+                    {contactData.phone_tennis}
+                  </a>
+                </div>
+                <div class="flex">
+                  <p class="text-slate-400 w-20 shrink-0">Boule</p>
+                  <a href={`tel:${contactData.phone_boule}`} class="hover:text-white transition-colors text-right">
+                    {contactData.phone_boule}
+                  </a>
+                </div>
               </div>
               <div>
-                <span class="font-semibold text-white">E-Mail:</span><br />
-                <a href={`mailto:${contactData.email}`} class="hover:text-white transition-colors">
-                  {contactData.email}
-                </a>
+
               </div>
           </div>
           <div>
