@@ -1,7 +1,7 @@
 # GitHub backend — update repo before deploying to production
 backend:
   name: github
-  repo: PLACEHOLDER/tennisclub  # TODO: replace with your-github-username/tennisclub
+  repo: andreas122001/tennisclub-doerverden-website
   branch: main
 
 # Enables the CMS UI against local files when running `npm run cms`
