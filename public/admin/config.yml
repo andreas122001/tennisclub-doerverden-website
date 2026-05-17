@@ -5,8 +5,8 @@ backend:
   branch: main
   base_url: https://tc-doerverden-cms-auth.andreaswinje.workers.dev
 
-# Enables the CMS UI against local files when running `npm run cms`
-local_backend: true
+# Enables (if true) the CMS UI against local files when running `npm run cms`
+local_backend: false
 
 # Images uploaded via CMS go to public/uploads/ and are served at /uploads/
 media_folder: "public/uploads"
