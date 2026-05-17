@@ -3,6 +3,7 @@ backend:
   name: github
   repo: andreas122001/tennisclub-doerverden-website
   branch: main
+  base_url: https://tc-doerverden-cms-auth.andreaswinje.workers.dev
 
 # Enables the CMS UI against local files when running `npm run cms`
 local_backend: true
