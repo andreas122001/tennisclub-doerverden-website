@@ -1,18 +1,16 @@
 {
-  "address": "Diensthoper Str. 119",
+  "membershipText": "Möchten Sie Mitglied werden? Wir freuen uns über Ihr Interesse! Rufen Sie uns an. Wir freuen uns auf Sie!",
   "city": "27313 Dörverden",
-  "phone_tennis": "+49 1743064666",
-  "phone_boule": "+49 42341525",
-  "email": "tennisclub-doerverden@web.de",
-  "membershipText": "Möchten Sie Mitglied werden? Wir freuen uns über Ihr Interesse! Schreiben Sie uns einfach eine E-Mail oder rufen Sie uns an – wir melden uns dann mit allen Informationen zur Mitgliedschaft.",
+  "phone_tennis": "01743064666",
+  "name_boule": "Irmgard Kern",
+  "name_tennis": "Lars Hermann",
+  "phone_boule": "042341525",
+  "address": "Diensthoper Str. 119",
   "openingHours": [
     {
-      "days": "Mo–Fr",
-      "hours": "09:00–21:00 Uhr"
-    },
-    {
-      "days": "Sa–So",
-      "hours": "08:00–20:00 Uhr"
+      "days": "",
+      "hours": ""
     }
-  ]
+  ],
+  "email": ""
 }

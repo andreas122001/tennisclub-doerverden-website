@@ -1,6 +1,6 @@
 ---
-title: Mitgliedschaftsbeiträge
-intro: "Werden Sie Teil unseres Vereins. Unsere Beiträge im Überblick:"
+title: Mitgliedsbeiträge
+intro: 
 table:
   - type: "Erwachsene (ab 25 Jahre)"
     price: "120 €/Jahr"

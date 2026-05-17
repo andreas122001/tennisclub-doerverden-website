@@ -38,16 +38,19 @@ collections:
         fields:
           - { label: "Straße / Hausnummer", name: "address",      widget: "string" }
           - { label: "PLZ / Ort",           name: "city",         widget: "string" }
+          - { label: "Kontaktperson für Tennis",  name: "name_tennis", widget: "string", required: false }
           - { label: "Telefon für Tennis",  name: "phone_tennis", widget: "string", required: false }
+          - { label: "Kontaktperson für Boule",  name: "name_boule", widget: "string", required: false }
           - { label: "Telefon für Boule",   name: "phone_boule",  widget: "string", required: false }
           - { label: "E-Mail",              name: "email",        widget: "string", required: false }
           - { label: "Mitgliedschaft (Text auf Kontaktseite)", name: "membershipText", widget: "text", required: false }
           - label: "Öffnungszeiten"
+            required: false
             name: "openingHours"
             widget: "list"
             fields:
-              - { label: "Tag(e)",  name: "days",  widget: "string" }
-              - { label: "Zeiten", name: "hours", widget: "string" }
+              - { label: "Tag(e)",  name: "days",  widget: "string", required: false }
+              - { label: "Zeiten", name: "hours", widget: "string", required: false }
 
       - name: "pricing"
         label: "Preise"

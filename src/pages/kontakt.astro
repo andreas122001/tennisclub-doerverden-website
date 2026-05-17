@@ -8,18 +8,13 @@ import contactData from '../data/contact.json'; // Content managed via CMS → s
     <h1 class="text-3xl font-bold text-slate-900 mb-4">Kontakt</h1>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-10">
+      <!-- First column -->
       <div>
-        <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500 mb-3">Adresse</h2>
-        <!-- not-italic: browsers render <address> in italic by default — this resets it -->
-        <address class="not-italic text-slate-800 leading-relaxed">
-          {contactData.address}<br />
-          {contactData.city}
-        </address>
-
         {contactData.phone_tennis && (
           <div class="mt-6">
-            <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500 mb-2">Telefon Tennis</h2>
+            <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500 mb-2">Kontakt Tennis</h2>
             <!-- tel: makes the number tappable on mobile -->
+            <p>{contactData.name_tennis}</p>
             <a href={`tel:${contactData.phone_tennis}`} class="text-slate-800 hover:text-emerald-700 transition-colors">
               {contactData.phone_tennis}
             </a>
@@ -28,34 +23,39 @@ import contactData from '../data/contact.json'; // Content managed via CMS → s
 
         {contactData.phone_boule && (
           <div class="mt-6">
-            <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500 mb-2">Telefon Boule</h2>
+            <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500 mb-2">Kontakt Boule</h2>
+            <p>{contactData.name_boule}</p>
             <a href={`tel:${contactData.phone_boule}`} class="text-slate-800 hover:text-emerald-700 transition-colors">
               {contactData.phone_boule}
             </a>
           </div>
         )}
-
-        {contactData.email && (
-          <div class="mt-6">
-            <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500 mb-2">E-Mail</h2>
-            <a href={`mailto:${contactData.email}`} class="text-slate-800 hover:text-emerald-700 transition-colors">
-              {contactData.email}
-            </a>
-          </div>
-        )}
       </div>
-
-      <div>
-        <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500 mb-3">Öffnungszeiten</h2>
-        <!-- <dl> (description list) is the semantically correct element for term/value pairs -->
-        <dl class="space-y-1">
-          {contactData.openingHours.map(row => (
-            <div class="flex gap-4">
-              <dt class="text-slate-500 w-24 shrink-0">{row.days}</dt>
-              <dd class="text-slate-800">{row.hours}</dd>
-            </div>
-          ))}
-        </dl>
+      <!-- Next column -->
+      <div class="sm:mt-6">
+        <!-- Optionally include opening hours -->
+        {contactData.openingHours[0].days && (
+          <!-- <dl> (description list) is the semantically correct element for term/value pairs -->
+          <dl class="space-y-1">
+            <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500 mb-3">Öffnungszeiten</h2>
+            {contactData.openingHours.map(row => (
+              <div class="flex gap-4">
+                <dt class="text-slate-500 w-24 shrink-0">{row.days}</dt>
+                <dd class="text-slate-800">{row.hours}</dd>
+              </div>
+            ))}
+          </dl>
+          <div class="mt-6"></div>  <!-- add some spacing if opening hours are shown -->
+        )}
+        <!-- Address -->
+        <div>
+          <h2 class="text-sm font-semibold uppercase tracking-wide text-slate-500 mb-3">Adresse</h2>
+          <!-- not-italic: browsers render <address> in italic by default — this resets it -->
+            <address class="not-italic text-slate-800 leading-relaxed">
+              {contactData.address}<br />
+              {contactData.city}
+            </address>
+        </div>
       </div>
     </div>
     <div class="mt-12">

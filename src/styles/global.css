@@ -11,7 +11,7 @@
 /* View transition speed — lower = snappier. Default is ~180ms. */
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: 120ms;
+  animation-duration: 90ms;
 }
 
 @layer base {
