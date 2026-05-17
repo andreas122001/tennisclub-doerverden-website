@@ -30,7 +30,7 @@ const navLinks = [
   { href: '/kontakt', label: 'Kontakt' },
 ];
 
-const currentPath = Astro.url.pathname;
+const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
 ---
 
 <!doctype html>
