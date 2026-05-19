@@ -22,6 +22,9 @@ const {
 // Build an absolute URL for og:image — required by the Open Graph spec
 const ogImageAbsolute = new URL(ogImage, Astro.url).href;
 
+const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
+const canonicalUrl = new URL(currentPath, Astro.site).href;
+
 const navLinks = [
   { href: '/', label: 'Startseite' },
   { href: '/ueber-uns', label: 'Über uns' },
@@ -29,8 +32,6 @@ const navLinks = [
   { href: '/galerie', label: 'Galerie' },
   { href: '/kontakt', label: 'Kontakt' },
 ];
-
-const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
 ---
 
 <!doctype html>
@@ -39,6 +40,7 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
     <title>{title} — TC Dörverden</title>
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon.png" type="image/png" />
@@ -56,6 +58,7 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
     <meta name="twitter:card"       content="summary_large_image" />
     <!-- Smooth page transitions (Astro built-in, no JS framework needed) -->
     <ClientRouter />
+    <slot name="head" />
   </head>
   <body class="min-h-screen flex flex-col bg-white text-slate-800">
 

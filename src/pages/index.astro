@@ -4,6 +4,7 @@ import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import homeData from '../data/home.json';
+import contactData from '../data/contact.json';
 
 const allPosts: CollectionEntry<'posts'>[] = await getCollection('posts');
 // Pinned posts float to the top, then most recent first within each group
@@ -30,6 +31,21 @@ const half = 1.5;                       // half-width of the separator stripe (%
 ---
 
 <BaseLayout title="Startseite" description={homeData.seoDescription || undefined}>
+  <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "SportsClub",
+    "name": "Tennisclub Dörverden e.V.",
+    "url": "https://tennisclub-doerverden.de",
+    "sport": ["Tennis", "Boule"],
+    "telephone": contactData.phone_tennis,
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": contactData.address,
+      "postalCode": contactData.city.split(' ')[0],
+      "addressLocality": contactData.city.split(' ').slice(1).join(' '),
+      "addressCountry": "DE"
+    }
+  })} />
 
   <!-- Split hero -->
   <section
