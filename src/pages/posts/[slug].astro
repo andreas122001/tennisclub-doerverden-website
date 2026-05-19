@@ -1,6 +1,8 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { Image } from 'astro:assets';
 import { getCollection, render } from 'astro:content';
+import { resolveImage } from '../../utils/images';
 
 // getStaticPaths tells Astro which pages to pre-generate at build time.
 // Each post in src/content/posts/ becomes its own URL: /posts/[slug]
@@ -17,15 +19,17 @@ const { post } = Astro.props;
 // render() converts the Markdown body into a component (Content).
 // Frontmatter fields like title and date are already on post.data.
 const { Content } = await render(post);
+const coverImg = resolveImage(post.data.coverImage);
 ---
 
 <BaseLayout title={post.data.title} description={post.data.description}>
   <article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
 
-    {post.data.coverImage && (
-      <img
-        src={post.data.coverImage}
+    {coverImg && (
+      <Image
+        src={coverImg}
         alt=""
+        width={768}
         class="w-full h-64 object-cover rounded-xl mb-8"
       />
     )}

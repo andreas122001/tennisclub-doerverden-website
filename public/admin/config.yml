@@ -9,7 +9,7 @@ backend:
 local_backend: false
 
 # Images uploaded via CMS go to public/uploads/ and are served at /uploads/
-media_folder: "public/uploads"
+media_folder: "src/assets/uploads"
 public_folder: "/uploads"
 
 collections:
