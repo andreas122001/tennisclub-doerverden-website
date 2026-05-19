@@ -1,5 +1,6 @@
 ---
 title: Mitgliedsbeiträge
+description: Informationen zu den Mitgliedsbeiträgen beim Tennisclub Dörverden e.V.
 intro: 
 table:
   - type: "Erwachsene (ab 25 Jahre)"

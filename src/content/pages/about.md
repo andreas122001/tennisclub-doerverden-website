@@ -1,5 +1,6 @@
 ---
 title: Über uns
+description: Der Tennisclub Dörverden e.V. stellt sich vor.
 ---
 
 Im Jahre 1983 haben tennisbegeisterte Einwohner den Verein gegründet. Neben den beiden Tennisplätzen, die im Jahre 1985 fertiggestellt wurden, konnte im Jahre 1987 auch das Vereinshaus eingeweiht werden. Die Arbeiten auf dem vereinseigenen Gelände wurden überwiegend in Eigenleistung der Mitglieder ausgeführt.

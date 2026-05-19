@@ -1,5 +1,6 @@
 ---
 title: Datenschutzerklärung
+description: Datenschutzerklärung des Tennisclub Dörverden e.V.
 ---
 
 

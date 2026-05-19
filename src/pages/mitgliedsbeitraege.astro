@@ -8,11 +8,11 @@ const { Content } = await render(entry);
 
 // Cast to a typed shape — the pages schema uses catchall() so extra fields are untyped
 type PricingRow = { type: string; price: string; note?: string };
-type PricingData = { title: string; intro?: string; table: PricingRow[] };
+type PricingData = { title: string; intro?: string; description?: string; table: PricingRow[] };
 const data = entry.data as unknown as PricingData;
 ---
 
-<BaseLayout title={data.title}>
+<BaseLayout title={data.title} description={data.description as string | undefined}>
   <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
     <h1 class="text-3xl font-bold text-slate-900 mb-4">{data.title}</h1>
     {data.intro && (

@@ -1,5 +1,6 @@
 ---
 title: Impressum
+description: Impressum des Tennisclub Dörverden e.V.
 ---
 *Angaben gemäß § 5 TMG*:
 

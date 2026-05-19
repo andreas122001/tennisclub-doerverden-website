@@ -29,7 +29,7 @@ const slant = homeData.heroSeparationSlant;  // how many % the diagonal deviates
 const half = 1.5;                       // half-width of the separator stripe (%)
 ---
 
-<BaseLayout title="Startseite" description={homeData.heroSubtitle}>
+<BaseLayout title="Startseite" description={homeData.seoDescription || undefined}>
 
   <!-- Split hero -->
   <section
@@ -140,7 +140,7 @@ const half = 1.5;                       // half-width of the separator stripe (%
                     {post.data.title}
                   </a>
                 </h3>
-                <time class="text-sm text-slate-400 mb-2">
+                <time class="text-sm text-slate-500 mb-2">
                   {post.data.date.toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' })}
                 </time>
                 {post.data.description && (
@@ -178,7 +178,7 @@ const half = 1.5;                       // half-width of the separator stripe (%
                 </time>
                 <p class="font-semibold text-slate-900 mt-0.5">{event.data.title}</p>
                 {event.data.location && (
-                  <p class="text-xs text-slate-400 mt-0.5">{event.data.location}</p>
+                  <p class="text-xs text-slate-500 mt-0.5">{event.data.location}</p>
                 )}
                 {event.data.description && (
                   <p class="text-sm text-slate-600 mt-1">{event.data.description}</p>

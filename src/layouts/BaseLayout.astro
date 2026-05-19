@@ -42,10 +42,12 @@ const currentPath = Astro.url.pathname.replace(/\/$/, '') || '/';
     <title>{title} — TC Dörverden</title>
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon.png" type="image/png" />
-    <!-- Inter font — preconnect first so the browser opens the connection early -->
+    <!-- Inter font — non-render-blocking load via preload + media swap trick -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" /></noscript>
     <!-- Open Graph — controls the preview card when the URL is shared on social media -->
     <meta property="og:type"        content="website" />
     <meta property="og:title"       content={`${title} — Tennisclub`} />

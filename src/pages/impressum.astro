@@ -8,7 +8,7 @@ const entry = (await getEntry('pages', 'impressum'))!;
 const { Content } = await render(entry);
 ---
 
-<BaseLayout title={entry.data.title}>
+<BaseLayout title={entry.data.title} description={entry.data.description as string | undefined}>
   <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
     <h1 class="text-3xl font-bold text-slate-900 mb-8">{entry.data.title}</h1>
     <!-- prose: styles the rendered Markdown -->

@@ -8,7 +8,7 @@ const items = await getCollection('gallery');
 const photos = items.filter(item => item.data.image);
 ---
 
-<BaseLayout title="Galerie">
+<BaseLayout title="Galerie" description={galleryData.description || undefined}>
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
     <h1 class="text-3xl font-bold text-slate-900 mb-4">Galerie</h1>
     {galleryData.intro && (

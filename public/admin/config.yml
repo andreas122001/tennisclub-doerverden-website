@@ -32,6 +32,7 @@ collections:
           - { label: "CTA-Leiste anzeigen",  name: "ctaEnabled", widget: "boolean", default: true, required: false }
           - { label: "CTA-Titel",            name: "ctaTitle",   widget: "string",  required: false }
           - { label: "CTA-Text",             name: "ctaText",    widget: "text",    required: false }
+          - { label: "SEO-Beschreibung (für Suchmaschinen)", name: "seoDescription", widget: "string", required: false }
 
       - name: "contact"
         label: "Kontakt"
@@ -67,12 +68,14 @@ collections:
               - { label: "Beitrag",        name: "price", widget: "string" }
               - { label: "Anmerkung",      name: "note",  widget: "string", required: false }
           - { label: "Hinweistext", name: "body", widget: "markdown", required: false }
+          - { label: "SEO-Beschreibung (für Suchmaschinen)", name: "description", widget: "string", required: false }
 
       - name: "gallery"
         label: "Galerie"
         file: "src/data/gallery.json"
         fields:
           - { label: "Einleitung", name: "intro", widget: "text", required: false }
+          - { label: "SEO-Beschreibung (für Suchmaschinen)", name: "description", widget: "string", required: false }
 
       - name: "about"
         label: "Über uns"
@@ -80,6 +83,7 @@ collections:
         fields:
           - { label: "Titel",   name: "title", widget: "string"   }
           - { label: "Inhalt",  name: "body",  widget: "markdown" }
+          - { label: "SEO-Beschreibung (für Suchmaschinen)", name: "description", widget: "string", required: false }
 
       - name: "impressum"
         label: "Impressum"
@@ -87,6 +91,7 @@ collections:
         fields:
           - { label: "Titel",  name: "title", widget: "string"   }
           - { label: "Inhalt", name: "body",  widget: "markdown" }
+          - { label: "SEO-Beschreibung (für Suchmaschinen)", name: "description", widget: "string", required: false }
 
       - name: "datenschutz"
         label: "Datenschutz"
@@ -94,6 +99,7 @@ collections:
         fields:
           - { label: "Titel",  name: "title", widget: "string"   }
           - { label: "Inhalt", name: "body",  widget: "markdown" }
+          - { label: "SEO-Beschreibung (für Suchmaschinen)", name: "description", widget: "string", required: false }
 
   # ─── Beiträge (blog posts) ────────────────────────────────────────────────
   - name: "posts"

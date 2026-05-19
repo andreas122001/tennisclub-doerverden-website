@@ -13,7 +13,7 @@ const sortedPosts = allPosts.sort((a, b) => {
 });
 ---
 
-<BaseLayout title="Alle Beiträge">
+<BaseLayout title="Alle Beiträge" description="Neuigkeiten und Beiträge des Tennisclub Dörverden e.V.">
   <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
 
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-10">
@@ -61,7 +61,7 @@ const sortedPosts = allPosts.sort((a, b) => {
                 {post.data.title}
               </a>
             </h2>
-            <time class="text-sm text-slate-400 mb-2">
+            <time class="text-sm text-slate-500 mb-2">
               {post.data.date.toLocaleDateString('de-DE', { day: '2-digit', month: 'long', year: 'numeric' })}
             </time>
             {post.data.description && (
