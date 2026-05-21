@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import galleryData from '../data/gallery.json';
 import { resolveImage } from '../utils/images';
@@ -27,10 +27,12 @@ const photos = items
         {photos.map(({ item, img }, i) => (
           <figure class="group overflow-hidden rounded-lg bg-slate-100 cursor-pointer">
             <!-- data-index lets the JS know which photo was clicked -->
-            <Image
+            <Picture
               src={img}
+              widths={[400, 800, 1200]}
+              sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+              formats={['avif', 'webp']}
               alt={item.data.caption ?? ''}
-              width={1200}
               loading="lazy"
               data-index={i}
               class="lightbox-trigger w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"

@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { Image } from 'astro:assets';
+import { Image, Picture } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import homeData from '../data/home.json';
@@ -58,13 +58,16 @@ const half = 1.5;                       // half-width of the separator stripe (%
   >
     <!-- Left image — clipped to the left of the slash -->
     {heroLeft && (
-      <Image
+      <Picture
         src={heroLeft}
+        widths={[640, 1280, 1920]}
+        sizes="100vw"
+        formats={['avif', 'webp']}
         alt=""
-        width={1920}
         loading="eager"
         fetchpriority="high"
-        class="absolute inset-0 w-full h-full object-cover opacity-60"
+        pictureAttributes={{ class: "absolute inset-0 w-full h-full" }}
+        class="w-full h-full object-cover opacity-60"
         style={heroRight
           ? "clip-path: polygon(0 0, calc(var(--sep)*1% + var(--slant)*1%) 0, calc(var(--sep)*1% - var(--slant)*1%) 100%, 0 100%)"
           : undefined}
@@ -73,13 +76,16 @@ const half = 1.5;                       // half-width of the separator stripe (%
 
     <!-- Right image — clipped to the right of the slash -->
     {heroRight && (
-      <Image
+      <Picture
         src={heroRight}
+        widths={[640, 1280, 1920]}
+        sizes="100vw"
+        formats={['avif', 'webp']}
         alt=""
-        width={1920}
         loading="eager"
         fetchpriority="high"
-        class="absolute inset-0 w-full h-full object-cover opacity-60"
+        pictureAttributes={{ class: "absolute inset-0 w-full h-full" }}
+        class="w-full h-full object-cover opacity-60"
         style="clip-path: polygon(calc(var(--sep)*1% + var(--slant)*1%) 0, 100% 0, 100% 100%, calc(var(--sep)*1% - var(--slant)*1%) 100%)"
       />
     )}
