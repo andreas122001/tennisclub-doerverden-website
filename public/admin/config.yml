@@ -8,8 +8,9 @@ backend:
 # Enables (if true) the CMS UI against local files when running `npm run cms`
 local_backend: false
 
-# Images uploaded via CMS go to public/uploads/ and are served at /uploads/
-media_folder: "src/assets/uploads"
+# Images uploaded via CMS go to public/uploads/ (served at /uploads/ for admin previews)
+# and are copied to src/assets/uploads/ before each build so Astro can optimise them.
+media_folder: "public/uploads"
 public_folder: "/uploads"
 
 collections:
