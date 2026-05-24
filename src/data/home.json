@@ -1,12 +1,13 @@
 {
-  "heroTitle": "Tennisclub Dörverden e.V.",
-  "heroSubtitle": "",
-  "seoDescription": "Willkommen beim Tennisclub Dörverden!",
-  "heroImageLeft": "/uploads/IMG_1253.jpg",
-  "heroImageRight": "/uploads/IMG_1269.jpg",
   "heroSeparation": 65,
+  "heroImage": "/uploads/DSC06703.jpg",
+  "heroImageLeft": "/uploads/IMG_1253.jpg",
+  "ctaTitle": "Interesse am Tennissport?",
   "heroSeparationSlant": 6,
   "ctaEnabled": true,
-  "ctaTitle": "Interesse am Tennissport?",
-  "ctaText": "Wir freuen uns über neue Mitglieder jeder Altersklasse und jeden Niveaus."
+  "heroSubtitle": "",
+  "heroImageRight": "/uploads/IMG_1269.jpg",
+  "ctaText": "Wir freuen uns über neue Mitglieder jeder Altersklasse und jeden Niveaus.",
+  "heroTitle": "Tennisclub Dörverden e.V.",
+  "seoDescription": "Willkommen beim Tennisclub Dörverden!"
 }
