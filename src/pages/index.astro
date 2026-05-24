@@ -1,6 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { Image, Picture } from 'astro:assets';
+import { Image, Picture, getImage } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import homeData from '../data/home.json';
@@ -28,6 +28,22 @@ const upcomingEvents = allEvents
 const heroLeft  = resolveImage(homeData.heroImageLeft);
 const heroRight = resolveImage(homeData.heroImageRight);
 
+// Quality 65 is invisible at 60% opacity but meaningfully smaller than the default 80
+const HERO_Q = 65;
+const HERO_WIDTHS = [640, 1280, 1920] as const;
+
+// Preload URLs — must match the exact options passed to <Picture> below so hashes align
+const [heroLeftSrcset, heroRightSrcset] = await Promise.all([
+  heroLeft
+    ? Promise.all(HERO_WIDTHS.map(w => getImage({ src: heroLeft,  width: w, format: 'avif', quality: HERO_Q })))
+        .then(imgs => imgs.map((img, i) => `${img.src} ${HERO_WIDTHS[i]}w`).join(', '))
+    : null,
+  heroRight
+    ? Promise.all(HERO_WIDTHS.map(w => getImage({ src: heroRight, width: w, format: 'avif', quality: HERO_Q })))
+        .then(imgs => imgs.map((img, i) => `${img.src} ${HERO_WIDTHS[i]}w`).join(', '))
+    : null,
+]);
+
 // Slash geometry constants — tweak to taste
 const sep = homeData.heroSeparation;   // 0–100: position of the slash centre
 const slant = homeData.heroSeparationSlant;  // how many % the diagonal deviates from vertical
@@ -35,6 +51,8 @@ const half = 1.5;                       // half-width of the separator stripe (%
 ---
 
 <BaseLayout title="Startseite" description={homeData.seoDescription || undefined}>
+  {heroLeftSrcset  && <link rel="preload" as="image" type="image/avif" imagesrcset={heroLeftSrcset}  imagesizes="100vw" fetchpriority="high" slot="head" />}
+  {heroRightSrcset && <link rel="preload" as="image" type="image/avif" imagesrcset={heroRightSrcset} imagesizes="100vw" slot="head" />}
   <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify({
     "@context": "https://schema.org",
     "@type": "SportsClub",
@@ -60,9 +78,10 @@ const half = 1.5;                       // half-width of the separator stripe (%
     {heroLeft && (
       <Picture
         src={heroLeft}
-        widths={[640, 1280, 1920]}
+        widths={[...HERO_WIDTHS]}
         sizes="100vw"
         formats={['avif', 'webp']}
+        quality={HERO_Q}
         alt=""
         loading="eager"
         fetchpriority="high"
@@ -78,9 +97,10 @@ const half = 1.5;                       // half-width of the separator stripe (%
     {heroRight && (
       <Picture
         src={heroRight}
-        widths={[640, 1280, 1920]}
+        widths={[...HERO_WIDTHS]}
         sizes="100vw"
         formats={['avif', 'webp']}
+        quality={HERO_Q}
         alt=""
         loading="eager"
         fetchpriority="high"
