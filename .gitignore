@@ -27,3 +27,4 @@ pnpm-debug.log*
 # additional
 project.md
 settings.local*
+src/assets/uploads/
